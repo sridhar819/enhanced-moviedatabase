@@ -36,11 +36,11 @@ const AllRoutes = ({type = '', searchUrl = ''}) => {
   }
 
   const goToLastPage = () => {
-    setPage(500)
+    setPage(Math.min(500, data?.totalPages))
   }
 
   const handleNextPage = () => {
-    if (pageNo < 500) {
+    if (pageNo < Math.min(500, data?.totalPages)) {
       setPage(pre => pre + 1)
     }
   }
@@ -65,60 +65,68 @@ const AllRoutes = ({type = '', searchUrl = ''}) => {
         {data.movieList.map(each => (
           <MovieItem key={each.id} movie={each} />
         ))}
-        <div className="d-flex justify-content-center gap-2 align-items-center w-100">
-          <button
-            onClick={goToFirstPage}
-            type="button"
-            className="btn btn-outline-primary"
-          >
-            first
-          </button>
-          <button
-            onClick={handlePrevPage}
-            type="button"
-            className="btn btn-outline-danger"
-          >
-            Prev
-          </button>
-          <mark className="px-2">{pageNo}</mark>
-          <button
-            onClick={handleNextPage}
-            type="button"
-            className="btn btn-outline-success"
-          >
-            Next
-          </button>
-          <button
-            onClick={goToLastPage}
-            type="button"
-            className="btn btn-outline-warning"
-          >
-            Last
-          </button>
-        </div>
-        {pageNo >= 500 && (
-          <p className="text-danger text-center w-100">Max pages Reached</p>
-        )}
       </div>
     </>
   )
 
-  switch (data.activeStage) {
-    case stagesList.initial:
-      return renderLoader()
-    case stagesList.success:
-      return data.movieList.length >= 1 ? (
-        successView()
-      ) : (
-        <Link className="d-flex justify-content-center mt-5" to="/">
-          <button className="btn btn-primary" type="button">
-            Go to home page
-          </button>
-        </Link>
-      )
-    default:
-      return null
+  const pageView = () => {
+    switch (data.activeStage) {
+      case stagesList.initial:
+        return renderLoader()
+      case stagesList.success:
+        return data.movieList.length >= 1 ? (
+          successView()
+        ) : (
+          <Link className="d-flex justify-content-center mt-5" to="/">
+            <button className="btn btn-primary" type="button">
+              Go to home page
+            </button>
+          </Link>
+        )
+      default:
+        return null
+    }
   }
+
+  return (
+    <>
+      {pageView()}
+      <div className="d-flex justify-content-center gap-2 align-items-center w-100">
+        <button
+          onClick={goToFirstPage}
+          type="button"
+          className="btn btn-outline-primary"
+        >
+          first
+        </button>
+        <button
+          onClick={handlePrevPage}
+          type="button"
+          className="btn btn-outline-danger"
+        >
+          Prev
+        </button>
+        <mark className="px-2">{pageNo}</mark>
+        <button
+          onClick={handleNextPage}
+          type="button"
+          className="btn btn-outline-success"
+        >
+          Next
+        </button>
+        <button
+          onClick={goToLastPage}
+          type="button"
+          className="btn btn-outline-warning"
+        >
+          Last
+        </button>
+      </div>
+      {pageNo >= 500 && (
+        <p className="text-danger text-center w-100">Max pages Reached</p>
+      )}
+    </>
+  )
 }
 
 export default AllRoutes

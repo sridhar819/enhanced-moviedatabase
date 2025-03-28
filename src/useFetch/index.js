@@ -53,9 +53,6 @@ const useFetch = (type = '', page = 1) => {
       movieList: [],
       activeStage: stagesList.initial,
     }))
-  }, [page])
-
-  useEffect(() => {
     getData()
   }, [type, page])
 
