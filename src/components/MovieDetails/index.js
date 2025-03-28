@@ -60,7 +60,6 @@ const MovieDetails = props => {
     homepage,
     overview,
     runtime,
-    status,
     voteAverage,
     voteCount,
     tagline,
